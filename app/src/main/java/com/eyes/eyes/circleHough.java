@@ -9,7 +9,7 @@ public class circleHough {
     int[] input;
     int[] output;
     float[] template = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
-    ;
+
     double progress;
     int width;
     int height;
@@ -64,9 +64,7 @@ public class circleHough {
 
         for (int x = 0; x < width; x++) {
             progress += 0.5;
-            System.out.print("\n");
             for (int y = 0; y < height; y++) {
-                System.out.print(input[y * width + x] + " ");
                 if ((input[y * width + x] & 0xff) == 255) {
                     for (int theta = 0; theta < 360; theta++) {
                         t = (theta * 3.14159265) / 180;
@@ -101,11 +99,8 @@ public class circleHough {
             }
         }
 
-        System.out.println("length of acc = " + acc.length);
-
         findMaxima();
 
-        System.out.println("done");
         return output;
     }
 
@@ -121,7 +116,7 @@ public class circleHough {
                 int value = (acc[x + (y * width)] & 0xff);
 
                 // if its higher than lowest value add it and then sort
-                if ((value > resultsRight[(accSize - 1) * 3])&&(x > threshold)) {
+                if ((value > resultsRight[(accSize - 1) * 3]) && (x > threshold)) {
 
                     // add to bottom of array
                     resultsRight[(accSize - 1) * 3] = value;
@@ -139,8 +134,7 @@ public class circleHough {
                         i = i - 3;
                         if (i < 0) break;
                     }
-                }
-                else if ((value > resultsLeft[(accSize - 1) * 3]&&(x < threshold))){
+                } else if ((value > resultsLeft[(accSize - 1) * 3] && (x < threshold))) {
 
                     // add to bottom of array
                     resultsLeft[(accSize - 1) * 3] = value;
@@ -171,11 +165,9 @@ public class circleHough {
         results[5] = resultsLeft[2];
 
         double ratio = (double) (width / 2) / accSize;
-        System.out.println("top " + accSize + " matches:");
 
         for (int i = accSize - 1; i >= 0; i--) {
             progress += ratio;
-            System.out.println("value: " + results[i * 3] + ", x: " + results[i * 3 + 1] + ", y: " + results[i * 3 + 2]);
             drawCircle(results[i * 3], results[i * 3 + 1], results[i * 3 + 2]);
         }
 
@@ -188,10 +180,10 @@ public class circleHough {
 
     private void setCentre(int xPos, int yPos) {
         output[(yPos * width) + xPos] = -1;
-        output[(yPos * width) + (xPos+1)] = -1;
-        output[(yPos * width) + (xPos-1)] = -1;
-        output[((yPos+1) * width) + xPos] = -1;
-        output[((yPos-1) * width) + xPos] = -1;
+        output[(yPos * width) + (xPos + 1)] = -1;
+        output[(yPos * width) + (xPos - 1)] = -1;
+        output[((yPos + 1) * width) + xPos] = -1;
+        output[((yPos - 1) * width) + xPos] = -1;
     }
 
     // draw circle at x y

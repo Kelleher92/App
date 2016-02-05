@@ -169,7 +169,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void goHome(View view) {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, MenuActivity.class);
         startActivity(i);
         finish();
     }

@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Created by Ian on 04-Feb-16.
+ */
+
 public class MenuActivity extends AppCompatActivity {
     Button image, video;
 
@@ -26,6 +30,12 @@ public class MenuActivity extends AppCompatActivity {
 
     public void Video(View view) {
         Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void Stream(View view) {
+        Intent i = new Intent(this, VideoActivity.class);
         startActivity(i);
         finish();
     }

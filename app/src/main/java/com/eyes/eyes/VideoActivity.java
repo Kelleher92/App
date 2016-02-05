@@ -25,17 +25,17 @@ import java.io.File;
  * Created by Ian on 04-Feb-16.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class VideoActivity extends AppCompatActivity {
 
     private static final int VIDEO_CAPTURE = 101;
     int radius = 22;
-    ImageView imageView;
+    VideoView videoView;
     Button back;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_video);
         back = (Button) findViewById(R.id.Backbutton);
 
         File mediaFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 
         Uri videoUri = Uri.fromFile(mediaFile);
+        videoView = (VideoView) findViewById(R.id.videoView);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
         startActivityForResult(intent, VIDEO_CAPTURE);
@@ -54,40 +55,37 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Video saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
 
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//
+//                try {
+//                    retriever.setDataSource(data.getData().getPath());
 
-                try {
-                    retriever.setDataSource(data.getData().getPath());
+                    videoView.setVideoPath(data.getData().getPath());
 
-                    final Bitmap input = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST);
-
-                    imageView = (ImageView) findViewById(R.id.imageView);
-                    // 240 x 320
-
-                    ProcessRequests processRequests = new ProcessRequests(this);
-                    processRequests.processFrameInBackground(input, radius, new GetImageCallback() {
-                        @Override
-                        public void done(Bitmap returnedImage) {
-                            if (returnedImage == null) {
-                                imageView.setImageBitmap(input);
-                                Log.i("MyActivity", "No returned image");
-                            } else {
-                                imageView.setImageBitmap(returnedImage);
-                                Log.i("MyActivity", "Returned image");
-                            }
-                        }
-                    });
-
-                } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
-                } catch (RuntimeException ex) {
-                    ex.printStackTrace();
-                } finally {
-                    try {
-                        retriever.release();
-                    } catch (RuntimeException ex) {
-                    }
-                }
+//                    ProcessRequests processRequests = new ProcessRequests(this);
+//                    processRequests.processVideoInBackground(input, radius, new GetVideoCallback() {
+//                        @Override
+//                        public void done(MediaStore.Video returnedVideo) {
+//                            if (returnedVideo == null) {
+//
+//                                Log.i("MyActivity", "No returned video");
+//                            } else {
+//
+//                                Log.i("MyActivity", "Returned video");
+//                            }
+//                        }
+//                    });
+//
+//                } catch (IllegalArgumentException ex) {
+//                    ex.printStackTrace();
+//                } catch (RuntimeException ex) {
+//                    ex.printStackTrace();
+//                } finally {
+//                    try {
+//                        retriever.release();
+//                    } catch (RuntimeException ex) {
+//                    }
+//                }
 
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Video recording cancelled.", Toast.LENGTH_LONG).show();

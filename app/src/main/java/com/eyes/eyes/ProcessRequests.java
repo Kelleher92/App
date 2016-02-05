@@ -3,6 +3,10 @@ package com.eyes.eyes;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,6 +23,22 @@ public class ProcessRequests {
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Processing");
         progressDialog.setMessage("Please wait...");
+    }
+
+    public Bitmap toGrayscale(Bitmap bmpOriginal) {
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
+
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmpGrayscale;
     }
 
     public void processFrameInBackground(Bitmap input, int radius, GetImageCallback imageCallback) {
@@ -42,7 +62,8 @@ public class ProcessRequests {
 
             Bitmap returnedImage = null;
             try {
-                returnedImage = processFrame.processFrame(input, radius);
+                Bitmap image = toGrayscale(input);
+                returnedImage = processFrame.processFrame(image, radius);
                 Log.i("MyActivity", "got output");
             } catch (IOException e) {
                 Log.i("MyActivity", "Didnt get output");

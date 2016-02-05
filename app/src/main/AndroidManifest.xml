@@ -32,11 +32,22 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" >
         </activity>
-        <activity android:name=".MenuActivity" >
+        <activity android:name=".MenuActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".ImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
             android:label="@string/title_activity_image"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".VideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:label="@string/title_activity_video"
             android:theme="@style/AppTheme" >
         </activity>
     </application>

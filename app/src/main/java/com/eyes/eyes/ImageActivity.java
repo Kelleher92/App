@@ -17,6 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+/**
+ * Created by Ian on 04-Feb-16.
+ */
+
 public class ImageActivity extends AppCompatActivity {
 
     int RESULT_LOAD_IMAGE = 1;
@@ -46,7 +50,7 @@ public class ImageActivity extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            final Bitmap input = toGrayscale(BitmapFactory.decodeFile(picturePath));
+            final Bitmap input = BitmapFactory.decodeFile(picturePath);
 
             imageView = (ImageView) findViewById(R.id.imgView);
 
@@ -64,22 +68,6 @@ public class ImageActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    public Bitmap toGrayscale(Bitmap bmpOriginal) {
-        int width, height;
-        height = bmpOriginal.getHeight();
-        width = bmpOriginal.getWidth();
-
-        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bmpGrayscale);
-        Paint paint = new Paint();
-        ColorMatrix cm = new ColorMatrix();
-        cm.setSaturation(0);
-        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
-        paint.setColorFilter(f);
-        c.drawBitmap(bmpOriginal, 0, 0, paint);
-        return bmpGrayscale;
     }
 
     public void Back(View view) {

@@ -2,10 +2,6 @@ package com.eyes.eyes;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Created by Ian on 04-Feb-16.
@@ -55,37 +53,58 @@ public class VideoActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Video saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
 
-//                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//
-//                try {
-//                    retriever.setDataSource(data.getData().getPath());
+                final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+
+                retriever.setDataSource(data.getData().getPath());
+
+                final ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
+
+                final MediaStore.Video output = new MediaStore.Video();
+
+                try {
+                    for (int i = 0; i < 10; i++) {
+
+                        Bitmap input = retriever.getFrameAtTime((1000 * i), MediaMetadataRetriever.OPTION_CLOSEST);
+
+                        ProcessRequests processRequests = new ProcessRequests(this);
+                        final int finalI = i;
+                        processRequests.processFrameInBackground(input, radius, new GetImageCallback() {
+                            @Override
+                            public void done(Bitmap returnedImage) {
+                                if (returnedImage == null) {
+                                    Log.i("MyActivity", "No returned video");
+                                } else {
+                                    returnedImage.copyPixelsToBuffer(byteBuffer);
+                                    //output.addFrame();
+                                    Log.i("MyActivity", "Returned video");
+                                }
+                            }
+                        });
+                    }
+
+
+                    Process chperm;
+                    chperm = Runtime.getRuntime().exec("su");
+                    DataOutputStream os = new DataOutputStream(chperm.getOutputStream());
+                    //os.writeBytes(ByteBuffer);
+                    os.flush();
 
                     videoView.setVideoPath(data.getData().getPath());
+                    videoView.start();
 
-//                    ProcessRequests processRequests = new ProcessRequests(this);
-//                    processRequests.processVideoInBackground(input, radius, new GetVideoCallback() {
-//                        @Override
-//                        public void done(MediaStore.Video returnedVideo) {
-//                            if (returnedVideo == null) {
-//
-//                                Log.i("MyActivity", "No returned video");
-//                            } else {
-//
-//                                Log.i("MyActivity", "Returned video");
-//                            }
-//                        }
-//                    });
-//
-//                } catch (IllegalArgumentException ex) {
-//                    ex.printStackTrace();
-//                } catch (RuntimeException ex) {
-//                    ex.printStackTrace();
-//                } finally {
-//                    try {
-//                        retriever.release();
-//                    } catch (RuntimeException ex) {
-//                    }
-//                }
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                } catch (RuntimeException ex) {
+                    ex.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        retriever.release();
+                    } catch (RuntimeException ex) {
+                    }
+                }
+
 
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Video recording cancelled.", Toast.LENGTH_LONG).show();

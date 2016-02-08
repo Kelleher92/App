@@ -34,6 +34,12 @@ public class MenuActivity extends AppCompatActivity {
         finish();
     }
 
+    public void Animation(View view) {
+        Intent i = new Intent(this, AnimationActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     public void Stream(View view) {
         Intent i = new Intent(this, VideoActivity.class);
         startActivity(i);

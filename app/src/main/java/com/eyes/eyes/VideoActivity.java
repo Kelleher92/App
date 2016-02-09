@@ -3,6 +3,7 @@ package com.eyes.eyes;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -57,17 +58,20 @@ public class VideoActivity extends AppCompatActivity {
 
                 retriever.setDataSource(data.getData().getPath());
 
-                final ByteBuffer byteBuffer = ByteBuffer.allocate(1000);
+                final ByteBuffer byteBuffer = ByteBuffer.allocate(100000);
 
                 final MediaStore.Video output = new MediaStore.Video();
 
-                try {
-                    for (int i = 0; i < 10; i++) {
+                final MediaRecorder
 
-                        Bitmap input = retriever.getFrameAtTime((1000 * i), MediaMetadataRetriever.OPTION_CLOSEST);
+                try {
+//                    for (int i = 0; i < 10; i++) {
+
+                        Bitmap input = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST);
+                final Bitmap[] out = {input};
 
                         ProcessRequests processRequests = new ProcessRequests(this);
-                        final int finalI = i;
+                        //final int finalI = i;
                         processRequests.processFrameInBackground(input, radius, new GetImageCallback() {
                             @Override
                             public void done(Bitmap returnedImage) {
@@ -76,35 +80,36 @@ public class VideoActivity extends AppCompatActivity {
                                 } else {
                                     returnedImage.copyPixelsToBuffer(byteBuffer);
                                     //output.addFrame();
+                                    out[0] = returnedImage;
                                     Log.i("MyActivity", "Returned video");
                                 }
                             }
                         });
-                    }
+//                    }
 
 
-                    Process chperm;
-                    chperm = Runtime.getRuntime().exec("su");
-                    DataOutputStream os = new DataOutputStream(chperm.getOutputStream());
-                    //os.writeBytes(ByteBuffer);
-                    os.flush();
+//                    Process chperm;
+//                    chperm = Runtime.getRuntime().exec("su");
+//                    DataOutputStream os = new DataOutputStream(chperm.getOutputStream());
+//                    //os.writeBytes(ByteBuffer);
+//                    os.flush();
 
-                    videoView.setVideoPath(data.getData().getPath());
-                    videoView.start();
+
 
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
                 } catch (RuntimeException ex) {
                     ex.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
                 } finally {
                     try {
                         retriever.release();
                     } catch (RuntimeException ex) {
                     }
                 }
-
+                videoView.setVideoPath(data.getData().getPath());
+                videoView.start();
 
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Video recording cancelled.", Toast.LENGTH_LONG).show();

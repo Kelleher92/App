@@ -8,8 +8,8 @@ import android.view.SurfaceView;
 /**
  * Created by Ian on 08-Feb-16.
  */
-public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
+public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private final Resources resources;
     private Dot dot;
 
@@ -23,7 +23,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        dot = new Dot(holder, resources);
+        dot = new Dot(holder, resources, getContext());
         dot.start();
     }
 
@@ -43,4 +43,5 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
         dot = null;
     }
+
 }

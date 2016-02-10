@@ -19,7 +19,7 @@ public class AnimationActivity extends AppCompatActivity {
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
 
-        relativeLayout.addView(new MySurfaceView(this, this.getResources()));
+        relativeLayout.addView(new TestSurfaceView(this, this.getResources()));
     }
 
     public void Back(View view) {

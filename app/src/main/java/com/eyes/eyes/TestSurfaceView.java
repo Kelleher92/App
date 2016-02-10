@@ -2,6 +2,7 @@ package com.eyes.eyes;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;

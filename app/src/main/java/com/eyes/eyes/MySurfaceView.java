@@ -32,7 +32,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public MySurfaceView(Context context, Resources resources) {
         super(context);
         this.resources = resources;
-        dot = null;
+        //dot = null;
 
         getHolder().addCallback(this);
         mHolder = getHolder();
@@ -48,8 +48,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        dot = new Dot(holder, resources, getContext());
-        dot.start();
+        //dot = new Dot(holder, resources, getContext());
+        //dot.start();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 e.printStackTrace();
             }
         }
-        dot = null;
+        //dot = null;
         shutdown();
     }
 
@@ -136,6 +136,4 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
         mInitSuccesful = true;
     }
-
-
 }

@@ -23,7 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void Image(View view) {
-        Intent i = new Intent(this, ImageActivity.class);
+        Intent i = new Intent(this, ScoreActivity.class);
         startActivity(i);
         finish();
     }

@@ -8,8 +8,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Camera;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.View;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Ian on 08-Feb-16.
@@ -23,6 +30,9 @@ public class Anim implements Runnable {
     private Bitmap dotBitmap;
     private Context mContext;
     int i;
+    private Camera mCamera;
+    private MediaRecorder mMediaRecorder;
+    private boolean mInitSuccesful;
 
     public Anim(SurfaceHolder holder, Resources resources, Context context) {
         dot = new Dot();
@@ -38,7 +48,16 @@ public class Anim implements Runnable {
     @Override
     public void run() {
         while (running) {
-            while (i < 80) {
+//            try {
+//                if (!mInitSuccesful)
+//                    initRecorder(surfaceHolder.getSurface());
+//                mMediaRecorder.start();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+
+            while (i < 100) {
                 drawGraphics();
                 i++;
             }
@@ -95,6 +114,7 @@ public class Anim implements Runnable {
                 i++;
             }
 
+//            shutdown();
             end();
         }
 
@@ -142,4 +162,71 @@ public class Anim implements Runnable {
     public void end() {
         running = false;
     }
+
+//    private void shutdown() {
+//        // Release MediaRecorder and especially the Camera as it's a shared
+//        // object that can be used by other applications
+//        mMediaRecorder.reset();
+//        mMediaRecorder.release();
+//        mMediaRecorder.stop();
+//        mMediaRecorder.reset();
+//        mCamera.release();
+//
+//        // once the objects have been released they can't be reused
+//        mMediaRecorder = null;
+//        mCamera = null;
+//    }
+//
+//    private void configure(Camera camera) {
+//        Camera.Parameters params = camera.getParameters();
+//
+//        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+//        params.setColorEffect(Camera.Parameters.EFFECT_MONO);
+//
+//        camera.setParameters(params);
+//    }
+//
+//    private void initRecorder(Surface surface) throws IOException {
+//        // It is very important to unlock the camera before doing setCamera
+//        // or it will results in a black preview
+//        if (mCamera == null) {
+//            mCamera = Camera.open(1);
+//            configure(mCamera);
+//            Camera.CameraInfo info = new Camera.CameraInfo();
+//            Camera.getCameraInfo(1, info);
+//            Log.i("can disable sound", " = " + info.canDisableShutterSound);
+//            if (info.canDisableShutterSound) {
+//                mCamera.enableShutterSound(false);
+//            }
+//            mCamera.unlock();
+//        }
+//
+//        if (mMediaRecorder == null)
+//            mMediaRecorder = new MediaRecorder();
+//        mMediaRecorder.setPreviewDisplay(surface);
+//
+//        mMediaRecorder.setCamera(mCamera);
+//
+//        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+//        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+//        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
+//
+//        mMediaRecorder.setOutputFile(file.getAbsolutePath());
+//
+//        // No limit. Check the space on disk!
+//        mMediaRecorder.setMaxDuration(-1);
+//        mMediaRecorder.setVideoFrameRate(15);
+//
+//        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+//
+//        try {
+//            mMediaRecorder.prepare();
+//        } catch (IllegalStateException e) {
+//            // This is thrown if the previous calls are not called with the
+//            // proper order
+//            e.printStackTrace();
+//        }
+//
+//        mInitSuccesful = true;
+//    }
 }

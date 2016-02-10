@@ -8,18 +8,19 @@
     tools:context="com.eyes.eyes.VideoActivity"
     android:background="#d96e70">
 
+    <ToggleButton
+        android:id="@+id/toggleRecordingButton"
+        android:layout_width="fill_parent"
+        android:textOff="Start Recording"
+        android:textOn="Stop Recording"
+        android:layout_height="wrap_content"
+        />
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
-
-        <VideoView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <SurfaceView android:id="@+id/surfaceView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/videoView"
-            android:layout_gravity="center" />
-
+            android:layout_height="fill_parent"></SurfaceView>
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="78dp"
@@ -27,6 +28,8 @@
             android:text="Back"
             android:id="@+id/Backbutton"
             android:onClick="Back"
-            android:layout_gravity="left|top" />
+            android:layout_gravity="left|bottom" />
     </FrameLayout>
 </RelativeLayout>
+
+

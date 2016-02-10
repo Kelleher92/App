@@ -33,6 +33,7 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 
@@ -47,13 +48,14 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mToggleButton = (ToggleButton) findViewById(R.id.toggleRecordingButton);
+
         mToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             // toggle video recording
             public void onClick(View v) {
-                if (((ToggleButton) v).isChecked())
+                if (((ToggleButton) v).isChecked()) {
                     mMediaRecorder.start();
-                else {
+                } else {
                     mMediaRecorder.stop();
                     mMediaRecorder.reset();
                     try {
@@ -75,11 +77,17 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         if (mCamera == null) {
             mCamera = Camera.open(1);
             configure(mCamera);
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(1, info);
+            if (info.canDisableShutterSound) {
+                mCamera.enableShutterSound(false);
+            }
             mCamera.unlock();
         }
 
         if (mMediaRecorder == null)
             mMediaRecorder = new MediaRecorder();
+
         mMediaRecorder.setPreviewDisplay(surface);
 
         mMediaRecorder.setCamera(mCamera);
@@ -87,17 +95,6 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
-        // "touch" the file
-        if (!file.exists()) {
-            File parent = file.getParentFile();
-            if (parent != null)
-                if (!parent.exists())
-                    if (!parent.mkdirs())
-                        throw new IOException("Cannot create " +
-                                "parent directories for file: " + file);
-
-            file.createNewFile();
-        }
 
         mMediaRecorder.setOutputFile(file.getAbsolutePath());
 
@@ -141,8 +138,6 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     private void configure(Camera camera) {
         Camera.Parameters params = camera.getParameters();
-
-        params.set("facing", 0);
 
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         params.setColorEffect(Camera.Parameters.EFFECT_MONO);

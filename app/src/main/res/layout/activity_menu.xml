@@ -18,9 +18,7 @@
         android:textSize="60dp"
         android:onClick="Image"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/Testbutton"
-        android:layout_alignEnd="@+id/Testbutton"
-        android:layout_marginTop="49dp" />
+        android:layout_toStartOf="@+id/Animbutton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,27 +28,24 @@
         android:textStyle="bold"
         android:textSize="60dp"
         android:onClick="Video"
-        android:layout_alignTop="@+id/Imagebutton"
-        android:layout_toRightOf="@+id/Imagebutton"
-        android:layout_toEndOf="@+id/Imagebutton"
         android:layout_marginLeft="61dp"
-        android:layout_marginStart="61dp" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="63dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Test"
-        android:onClick="Animation"
+        android:onClick="Test"
         android:id="@+id/Testbutton"
         android:singleLine="true"
         android:textStyle="bold"
         android:textSize="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginLeft="63dp"
-        android:layout_marginStart="63dp"
-        android:layout_marginBottom="61dp" />
+        android:layout_marginEnd="26dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/Animbutton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -61,8 +56,34 @@
         android:textStyle="bold"
         android:textSize="50dp"
         android:onClick="Stream"
-        android:layout_alignTop="@+id/Testbutton"
-        android:layout_alignLeft="@+id/Videobutton"
-        android:layout_alignStart="@+id/Videobutton"
-        android:layout_alignBottom="@+id/Testbutton" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/Videobutton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Face"
+        android:onClick="Face"
+        android:id="@+id/Facebutton"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:layout_marginLeft="63dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/Testbutton"
+        android:elegantTextHeight="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anim"
+        android:onClick="Animation"
+        android:id="@+id/Animbutton"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textSize="60dp"
+        android:layout_marginLeft="63dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/Videobutton" />
 </RelativeLayout>

@@ -23,7 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void Image(View view) {
-        Intent i = new Intent(this, ScoreActivity.class);
+        Intent i = new Intent(this, ImageActivity.class);
         startActivity(i);
         finish();
     }
@@ -42,6 +42,18 @@ public class MenuActivity extends AppCompatActivity {
 
     public void Stream(View view) {
         Intent i = new Intent(this, VideoActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void Test(View view) {
+        Intent i = new Intent(this, ScoreActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void Face(View view) {
+        Intent i = new Intent(this, FaceActivity.class);
         startActivity(i);
         finish();
     }

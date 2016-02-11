@@ -50,4 +50,12 @@
             android:clickable="false"
             android:textColor="#ffffff" />
     </FrameLayout>
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="78dp"
+        android:layout_height="38dp"
+        android:text="Back"
+        android:id="@+id/Backbutton"
+        android:onClick="Back"
+        android:layout_gravity="left|top" />
 </FrameLayout>

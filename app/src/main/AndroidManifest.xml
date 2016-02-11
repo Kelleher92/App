@@ -61,11 +61,17 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme" >
         </activity>
-        <activity android:name=".ScoreActivity"
+        <activity
+            android:name=".ScoreActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_animation"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity android:name=".FaceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
         </activity>
     </application>
 

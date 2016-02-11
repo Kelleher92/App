@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;

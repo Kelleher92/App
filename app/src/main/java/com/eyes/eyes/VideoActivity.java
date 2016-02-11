@@ -2,6 +2,9 @@ package com.eyes.eyes;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -40,7 +43,6 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         back = (Button) findViewById(R.id.Backbutton);
         // we shall take the video in landscape orientation
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         mHolder = mSurfaceView.getHolder();
@@ -89,7 +91,6 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
             mMediaRecorder = new MediaRecorder();
 
         mMediaRecorder.setPreviewDisplay(surface);
-
         mMediaRecorder.setCamera(mCamera);
 
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);

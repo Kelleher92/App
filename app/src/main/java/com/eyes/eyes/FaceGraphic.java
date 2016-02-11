@@ -3,8 +3,14 @@ package com.eyes.eyes;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import com.google.android.gms.vision.face.Face;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.view.Display;
 
+import com.google.android.gms.vision.face.Face;
+import com.google.android.gms.vision.face.Landmark;
+
+import java.util.List;
 
 /**
  * Graphic instance for rendering face position, orientation, and landmarks within an associated
@@ -79,18 +85,19 @@ class FaceGraphic extends GraphicOverlay.Graphic {
             return;
         }
 
-        // Draws a circle at the position of the detected face, with the face's track id below.
         float x = translateX(face.getPosition().x + face.getWidth() / 2);
         float y = translateY(face.getPosition().y + face.getHeight() / 2);
-        canvas.drawCircle(x, y, FACE_POSITION_RADIUS, mFacePositionPaint);
-        canvas.drawText("id: " + mFaceId, x + ID_X_OFFSET, y + ID_Y_OFFSET, mIdPaint);
-        canvas.drawText("happiness: " + String.format("%.2f", face.getIsSmilingProbability()), x - ID_X_OFFSET, y - ID_Y_OFFSET, mIdPaint);
-        canvas.drawText("right eye: " + String.format("%.2f", face.getIsRightEyeOpenProbability()), x + ID_X_OFFSET * 2, y + ID_Y_OFFSET * 2, mIdPaint);
-        canvas.drawText("left eye: " + String.format("%.2f", face.getIsLeftEyeOpenProbability()), x - ID_X_OFFSET*2, y - ID_Y_OFFSET*2, mIdPaint);
+
+        if(face.getLandmarks().size() > 1) {
+            if (face.getLandmarks().get(0).getType() == 10)
+                canvas.drawCircle(canvas.getWidth() - face.getLandmarks().get(0).getPosition().x, face.getLandmarks().get(0).getPosition().y, FACE_POSITION_RADIUS, mFacePositionPaint);
+            if (face.getLandmarks().get(1).getType() == 4)
+                canvas.drawCircle(canvas.getWidth() - face.getLandmarks().get(1).getPosition().x, face.getLandmarks().get(1).getPosition().y, FACE_POSITION_RADIUS, mFacePositionPaint);
+        }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getWidth() / 2.0f);
-        float yOffset = scaleY(face.getHeight() / 2.0f);
+        float xOffset = scaleX(face.getWidth() / 3.0f);
+        float yOffset = scaleY(face.getHeight() / 10.0f);
         float left = x - xOffset;
         float top = y - yOffset;
         float right = x + xOffset;

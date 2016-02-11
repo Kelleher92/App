@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -116,6 +117,8 @@ public final class FaceActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         FaceDetector detector = new FaceDetector.Builder(context)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+                .setProminentFaceOnly(true)
+                .setTrackingEnabled(true)
                 .build();
 
         detector.setProcessor(
@@ -293,6 +296,7 @@ public final class FaceActivity extends AppCompatActivity {
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
+
         }
 
         /**

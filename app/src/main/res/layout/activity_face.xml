@@ -11,9 +11,12 @@
         android:id="@+id/preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
         <com.eyes.eyes.GraphicOverlay
             android:id="@+id/faceOverlay"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
+
     </com.eyes.eyes.CameraSourcePreview>
+
 </LinearLayout>

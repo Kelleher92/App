@@ -2,6 +2,10 @@ package com.eyes.eyes;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -9,11 +13,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.ToggleButton;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,16 +24,16 @@ import java.io.IOException;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private final Resources resources;
-    private Dot dot;
+    Camera.Parameters parameters;
     private Camera mCamera;
     private SurfaceHolder mHolder;
     private MediaRecorder mMediaRecorder;
     private boolean mInitSuccesful;
+    private int radius = 25;
 
     public MySurfaceView(Context context, Resources resources) {
         super(context);
         this.resources = resources;
-        //dot = null;
 
         getHolder().addCallback(this);
         mHolder = getHolder();
@@ -48,25 +49,37 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //dot = new Dot(holder, resources, getContext());
-        //dot.start();
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
+        mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+            public void onPreviewFrame(byte[] _data, Camera _camera) {
+                Log.d("SurfaceChanged", String.format("Got %d bytes of camera data", _data.length));
+
+//                Camera.Size size = parameters.getPreviewSize();
+//                YuvImage image = new YuvImage(_data, parameters.getPreviewFormat(), size.width, size.height, null);
+//
+//                ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                image.compressToJpeg(new Rect(0, 0, size.width, size.height), 50, out);
+//                byte[] imageBytes = out.toByteArray();
+//                Bitmap newimage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+//
+//                try {
+//                    Bitmap output = processFrame.processFrame(newimage, radius);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                Log.i("test","test");
+            }
+        });
 
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        if (dot != null) {
-            try {
-                dot.stop();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        //dot = null;
         shutdown();
     }
 
@@ -85,12 +98,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     private void configure(Camera camera) {
-        Camera.Parameters params = camera.getParameters();
+        parameters = mCamera.getParameters();
 
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        params.setColorEffect(Camera.Parameters.EFFECT_MONO);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+        parameters.setColorEffect(Camera.Parameters.EFFECT_MONO);
 
-        camera.setParameters(params);
+        camera.setParameters(parameters);
     }
 
     private void initRecorder(Surface surface) throws IOException {

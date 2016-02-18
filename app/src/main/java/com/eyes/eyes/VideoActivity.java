@@ -10,6 +10,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -135,6 +136,11 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
+        mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+            public void onPreviewFrame(byte[] _data, Camera _camera) {
+                Log.d("SurfaceChanged", String.format("Got %d bytes of camera data", _data.length));
+            }
+        });
     }
 
     private void configure(Camera camera) {

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.view.Display;
 
 import com.google.android.gms.vision.face.Face;
@@ -96,12 +97,15 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getWidth() / 3.0f);
-        float yOffset = scaleY(face.getHeight() / 10.0f);
+        float xOffset = scaleX(face.getWidth() / 2.5f);
+        float yOffset = scaleY(face.getHeight() / 9.0f);
         float left = x - xOffset;
         float top = y - yOffset;
         float right = x + xOffset;
         float bottom = y + yOffset;
-        canvas.drawRect(left, top, right, bottom, mBoxPaint);
+
+        Rect rect = new Rect(((int) left), ((int) top), ((int) right), ((int) bottom));
+
+        canvas.drawRect(rect, mBoxPaint);
     }
 }

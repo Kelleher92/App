@@ -20,8 +20,6 @@ import java.util.List;
 class FaceGraphic extends GraphicOverlay.Graphic {
     private static final float FACE_POSITION_RADIUS = 10.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
-    private static final float ID_Y_OFFSET = 50.0f;
-    private static final float ID_X_OFFSET = -50.0f;
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     private static final int COLOR_CHOICES[] = {
@@ -41,7 +39,6 @@ class FaceGraphic extends GraphicOverlay.Graphic {
 
     private volatile Face mFace;
     private int mFaceId;
-    private float mFaceHappiness;
 
     FaceGraphic(GraphicOverlay overlay) {
         super(overlay);
@@ -71,9 +68,28 @@ class FaceGraphic extends GraphicOverlay.Graphic {
      * Updates the face instance from the detection of the most recent frame.  Invalidates the
      * relevant portions of the overlay to trigger a redraw.
      */
-    void updateFace(Face face) {
+    Rect updateFace(Face face) {
         mFace = face;
         postInvalidate();
+
+        if (face == null) {
+            return null;
+        }
+
+        float x = translateX(face.getPosition().x + face.getWidth() / 2);
+        float y = translateY(face.getPosition().y + face.getHeight() / 2);
+
+        // Draws a bounding box around the face.
+        float xOffset = scaleX(face.getWidth() / 2.5f);
+        float yOffset = scaleY(face.getHeight() / 9.0f);
+        float left = x - xOffset;
+        float top = y - yOffset;
+        float right = x + xOffset;
+        float bottom = y + yOffset;
+
+        Rect rect = new Rect(((int) left), ((int) top), ((int) right), ((int) bottom));
+
+        return rect;
     }
 
     /**

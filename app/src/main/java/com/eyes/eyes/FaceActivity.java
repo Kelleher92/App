@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -38,7 +39,8 @@ public final class FaceActivity extends AppCompatActivity {
     int height = 240;
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
-
+    private Rect rect;
+    private boolean running;
     private static final int RC_HANDLE_GMS = 9001;
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
@@ -73,6 +75,7 @@ public final class FaceActivity extends AppCompatActivity {
             requestCameraPermission();
         }
     }
+
 
     /**
      * Handles the requesting of the camera permission.  This includes
@@ -141,6 +144,7 @@ public final class FaceActivity extends AppCompatActivity {
                 .setFacing(CameraSource.CAMERA_FACING_FRONT)
                 .setRequestedFps(30.0f)
                 .build();
+
     }
 
     /**
@@ -159,6 +163,8 @@ public final class FaceActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        running = false;
+
         mPreview.stop();
     }
 
@@ -169,6 +175,8 @@ public final class FaceActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        running = false;
+
         if (mCameraSource != null) {
             mCameraSource.release();
         }
@@ -231,6 +239,7 @@ public final class FaceActivity extends AppCompatActivity {
      * again when the camera source is created.
      */
     private void startCameraSource() {
+        running = true;
 
         // check that the device has play services available.
         int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
@@ -250,6 +259,8 @@ public final class FaceActivity extends AppCompatActivity {
                 mCameraSource = null;
             }
         }
+
+
     }
 
     //==============================================================================================
@@ -294,7 +305,10 @@ public final class FaceActivity extends AppCompatActivity {
         @Override
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
             mOverlay.add(mFaceGraphic);
-            mFaceGraphic.updateFace(face);
+            rect = mFaceGraphic.updateFace(face);
+
+            Log.i("size1", "left " + rect.left + " right " + rect.right + " top " + rect.top + " bottom " + rect.bottom);
+            Log.i("size2", "left " + mPreview.getLeft() + " right " + mPreview.getRight() + " top " + mPreview.getTop() + " bottom " + mPreview.getBottom());
 
         }
 
@@ -305,7 +319,7 @@ public final class FaceActivity extends AppCompatActivity {
          */
         @Override
         public void onMissing(FaceDetector.Detections<Face> detectionResults) {
-            mOverlay.remove(mFaceGraphic);
+            //mOverlay.remove(mFaceGraphic);
         }
 
         /**

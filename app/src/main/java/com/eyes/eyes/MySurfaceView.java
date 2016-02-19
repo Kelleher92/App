@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Created by Ian on 08-Feb-16.
@@ -29,11 +30,14 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private SurfaceHolder mHolder;
     private MediaRecorder mMediaRecorder;
     private boolean mInitSuccesful;
-    private int radius = 25;
+    private int count;
+    private ByteBuffer buffer;
 
     public MySurfaceView(Context context, Resources resources) {
         super(context);
         this.resources = resources;
+
+        count = 0;
 
         getHolder().addCallback(this);
         mHolder = getHolder();
@@ -57,6 +61,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         mCamera.setPreviewCallback(new Camera.PreviewCallback() {
             public void onPreviewFrame(byte[] _data, Camera _camera) {
                 Log.d("SurfaceChanged", String.format("Got %d bytes of camera data", _data.length));
+                count++;
+                Log.i("SurfaceChanged", "Frame " + count);
 
 //                Camera.Size size = parameters.getPreviewSize();
 //                YuvImage image = new YuvImage(_data, parameters.getPreviewFormat(), size.width, size.height, null);
@@ -125,7 +131,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setPreviewDisplay(surface);
 
-        mMediaRecorder.setCamera(mCamera);
+        mMediaRecorder.setCamera(Camera.open(1));
 
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);

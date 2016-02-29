@@ -131,7 +131,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setPreviewDisplay(surface);
 
-        mMediaRecorder.setCamera(Camera.open(1));
+        mMediaRecorder.setCamera(mCamera);
 
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);

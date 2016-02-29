@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,9 +118,6 @@ public class Anim implements Runnable {
 //            shutdown();
             end();
         }
-
-        Intent myIntent = new Intent(mContext, MenuActivity.class);
-        mContext.startActivity(myIntent);
     }
 
     private void drawGraphics() {
@@ -161,6 +159,8 @@ public class Anim implements Runnable {
 
     public void end() {
         running = false;
+        Intent myIntent = new Intent(mContext, MenuActivity.class);
+        mContext.startActivity(myIntent);
     }
 
 //    private void shutdown() {

@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
 /**
@@ -118,14 +120,45 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
         mMediaRecorder.setCamera(mCamera);
 
-        mMediaRecorder.setVideoEncodingBitRate(3000000);
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+
+        Method[] methods = mMediaRecorder.getClass().getMethods();
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setVideoFrameRate(24);
+        mMediaRecorder.setVideoSize(720, 480);
+
+        for (Method method: methods){
+            try{
+                if(method.getName().equals("setAudioEncodingBitRate")){
+                    method.invoke(mMediaRecorder,12200);
+                }
+                else if(method.getName().equals("setVideoEncodingBitRate")){
+                    method.invoke(mMediaRecorder, 3000000);
+                }
+                else if(method.getName().equals("setAudioSamplingRate")){
+                    method.invoke(mMediaRecorder,8000);
+                }
+                else if(method.getName().equals("setVideoFrameRate")){
+                    method.invoke(mMediaRecorder,24);
+                }
+            }catch (IllegalArgumentException e) {
+
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
 
         mMediaRecorder.setOutputFile(file.getAbsolutePath());
 
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
 
         try {
             mMediaRecorder.prepare();

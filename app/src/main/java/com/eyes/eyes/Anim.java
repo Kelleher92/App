@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,17 +28,12 @@ public class Anim implements Runnable {
     private Dot dot;
     private Paint paint;
     private Bitmap dotBitmap;
-    private Context mContext;
     int i;
-    private Camera mCamera;
-    private MediaRecorder mMediaRecorder;
-    private boolean mInitSuccesful;
 
     public Anim(SurfaceHolder holder, Resources resources, Context context) {
         dot = new Dot();
         this.surfaceHolder = holder;
         i = 0;
-        mContext = context;
 
         paint = new Paint();
 
@@ -49,14 +43,6 @@ public class Anim implements Runnable {
     @Override
     public void run() {
         while (running) {
-//            try {
-//                if (!mInitSuccesful)
-//                    initRecorder(surfaceHolder.getSurface());
-//                mMediaRecorder.start();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
 
             while (i < 100) {
                 drawGraphics();
@@ -115,7 +101,6 @@ public class Anim implements Runnable {
                 i++;
             }
 
-//            shutdown();
             end();
         }
     }
@@ -134,6 +119,7 @@ public class Anim implements Runnable {
         } finally {
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+
     }
 
     private void drawDot(Canvas canvas) {
@@ -159,74 +145,5 @@ public class Anim implements Runnable {
 
     public void end() {
         running = false;
-        Intent myIntent = new Intent(mContext, MenuActivity.class);
-        mContext.startActivity(myIntent);
     }
-
-//    private void shutdown() {
-//        // Release MediaRecorder and especially the Camera as it's a shared
-//        // object that can be used by other applications
-//        mMediaRecorder.reset();
-//        mMediaRecorder.release();
-//        mMediaRecorder.stop();
-//        mMediaRecorder.reset();
-//        mCamera.release();
-//
-//        // once the objects have been released they can't be reused
-//        mMediaRecorder = null;
-//        mCamera = null;
-//    }
-//
-//    private void configure(Camera camera) {
-//        Camera.Parameters params = camera.getParameters();
-//
-//        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-//        params.setColorEffect(Camera.Parameters.EFFECT_MONO);
-//
-//        camera.setParameters(params);
-//    }
-//
-//    private void initRecorder(Surface surface) throws IOException {
-//        // It is very important to unlock the camera before doing setCamera
-//        // or it will results in a black preview
-//        if (mCamera == null) {
-//            mCamera = Camera.open(1);
-//            configure(mCamera);
-//            Camera.CameraInfo info = new Camera.CameraInfo();
-//            Camera.getCameraInfo(1, info);
-//            Log.i("can disable sound", " = " + info.canDisableShutterSound);
-//            if (info.canDisableShutterSound) {
-//                mCamera.enableShutterSound(false);
-//            }
-//            mCamera.unlock();
-//        }
-//
-//        if (mMediaRecorder == null)
-//            mMediaRecorder = new MediaRecorder();
-//        mMediaRecorder.setPreviewDisplay(surface);
-//
-//        mMediaRecorder.setCamera(mCamera);
-//
-//        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-//        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-//        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
-//
-//        mMediaRecorder.setOutputFile(file.getAbsolutePath());
-//
-//        // No limit. Check the space on disk!
-//        mMediaRecorder.setMaxDuration(-1);
-//        mMediaRecorder.setVideoFrameRate(15);
-//
-//        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
-//
-//        try {
-//            mMediaRecorder.prepare();
-//        } catch (IllegalStateException e) {
-//            // This is thrown if the previous calls are not called with the
-//            // proper order
-//            e.printStackTrace();
-//        }
-//
-//        mInitSuccesful = true;
-//    }
 }

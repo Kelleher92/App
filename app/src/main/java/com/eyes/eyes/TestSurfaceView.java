@@ -1,6 +1,7 @@
 package com.eyes.eyes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -25,6 +26,7 @@ import java.io.IOException;
 public class TestSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private final Resources resources;
     private Dot dot;
+    private int count;
 
     public TestSurfaceView(Context context, Resources resources) {
         super(context);
@@ -37,6 +39,7 @@ public class TestSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         dot = new Dot(holder, resources, getContext());
+        count = 0;
         dot.start();
     }
 
@@ -56,5 +59,4 @@ public class TestSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
         dot = null;
     }
-
 }

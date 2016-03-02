@@ -1,11 +1,8 @@
 package com.eyes.eyes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -14,7 +11,6 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -31,7 +27,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private MediaRecorder mMediaRecorder;
     private boolean mInitSuccesful;
     private int count;
-    private ByteBuffer buffer;
 
     public MySurfaceView(Context context, Resources resources) {
         super(context);
@@ -56,7 +51,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+    public void surfaceChanged(final SurfaceHolder holder, int format, int width,
                                int height) {
         mCamera.setPreviewCallback(new Camera.PreviewCallback() {
             public void onPreviewFrame(byte[] _data, Camera _camera) {
@@ -64,24 +59,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 count++;
                 Log.i("SurfaceChanged", "Frame " + count);
 
-//                Camera.Size size = parameters.getPreviewSize();
-//                YuvImage image = new YuvImage(_data, parameters.getPreviewFormat(), size.width, size.height, null);
-//
-//                ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                image.compressToJpeg(new Rect(0, 0, size.width, size.height), 50, out);
-//                byte[] imageBytes = out.toByteArray();
-//                Bitmap newimage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//
-//                try {
-//                    Bitmap output = processFrame.processFrame(newimage, radius);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                Log.i("test","test");
+                if (count == 170) {
+                    Log.i("SurfaceChanged", "count = 150");
+                    mMediaRecorder.stop();
+                    shutdown();
+                }
             }
         });
-
     }
 
     @Override
@@ -89,25 +73,26 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         shutdown();
     }
 
-    private void shutdown() {
+    public void shutdown() {
         // Release MediaRecorder and especially the Camera as it's a shared
         // object that can be used by other applications
         mMediaRecorder.reset();
         mMediaRecorder.release();
-        mMediaRecorder.stop();
-        mMediaRecorder.reset();
-        mCamera.release();
-
-        // once the objects have been released they can't be reused
         mMediaRecorder = null;
+        mCamera.stopPreview();
+        mCamera.setPreviewCallback(null);
+        mCamera.release();
         mCamera = null;
+        this.getHolder().removeCallback(this);
+
+        Intent myIntent = new Intent(super.getContext(), MenuActivity.class);
+        super.getContext().startActivity(myIntent);
     }
 
     private void configure(Camera camera) {
         parameters = mCamera.getParameters();
 
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        parameters.setColorEffect(Camera.Parameters.EFFECT_MONO);
 
         camera.setParameters(parameters);
     }
@@ -133,17 +118,14 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
         mMediaRecorder.setCamera(mCamera);
 
+        mMediaRecorder.setVideoEncodingBitRate(3000000);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
 
         mMediaRecorder.setOutputFile(file.getAbsolutePath());
 
-        // No limit. Check the space on disk!
-        mMediaRecorder.setMaxDuration(-1);
-        mMediaRecorder.setVideoFrameRate(15);
-
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
 
         try {
             mMediaRecorder.prepare();
